@@ -15,4 +15,4 @@ Cara Instalasi
 3. Import database fpdwo.sql ke phpmyadmin
 4. Copy File mondrian, lalu paste ke folder \xampp\tomcat\webapps (PASTE DI SINI!)
 5. Start Apache, MySQL, dan Tomcat di xampp
-6. Selesai. Anda bisa membuka halaman website dengan URL locathost/namafolder(FPDWO_KEL10)
+6. Selesai. Anda bisa membuka halaman website dengan URL localhost/namafolder(FPDWO_KEL10)
