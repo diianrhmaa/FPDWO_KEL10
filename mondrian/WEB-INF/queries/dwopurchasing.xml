@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<Schema name="fpdwo">
+  
+  <!-- purchasing -->
+  <Cube name="Pembelian" defaultMeasure="OrderQty">
+
+    <Table name="fakta_pembelian"/>
+    
+    <Dimension name="Time" foreignKey="TimeID">
+      <Hierarchy hasAll="true" allMemberName="All Times" primaryKey="TimeID">
+        <Table name="dimtime"/>
+        <Level name="Year" column="Year" type="Numeric" uniqueMembers="true" levelType="TimeYears"/>
+        <Level name="Month" column="Month" uniqueMembers="false" type="Numeric" levelType="TimeMonths"/>
+        <Level name="Date" column="Date" uniqueMembers="false" type="Numeric" levelType="TimeDays"/>
+      </Hierarchy>
+    </Dimension>
+
+    <Dimension name="Vendor" foreignKey="VendorID">
+      <Hierarchy hasAll="true" allMemberName="All Vendors" primaryKey="VendorID">
+        <Table name="dimvendor"/>
+        <Level name="vendoraccname" column="VendorAccName"/>
+        <Level name="vendorname" column="VendorName"/>
+      </Hierarchy>
+    </Dimension>
+
+    <Dimension name="Product" foreignKey="ProductID">
+      <Hierarchy hasAll="true" allMemberName="All Products" primaryKey="ProductID">
+        <Table name="dimproduct"/>
+          <Level name="productname" column="ProductName"/>
+          <Level name="productcategory" column="ProductCategory"/>
+          <Level name="productsubcategory" column="ProductSubCategory"/>
+          <Level name="standardcost" column="StandardCost"/>
+          <Level name="listprice" column="ListPrice"/>
+      </Hierarchy>
+
+    </Dimension>
+    <Dimension name="Ship Method" foreignKey="ShipMethodID">
+      <Hierarchy hasAll="true" allMemberName="All ShipMethods" primaryKey="ShipMethodID">
+        <Table name="dimshipmethod"/>
+          <Level name="shipname" column="ShipName"/>
+          <Level name="shipbase" column="ShipBase"/>
+          <Level name="shiprate" column="ShipRate"/>
+      </Hierarchy>
+    </Dimension>
+
+    <Measure name="Order Qty" column="OrderQty" aggregator="sum"
+        formatString="Standard"/>
+    <Measure name="Line Total" column="LineTotal" aggregator="sum"
+        formatString="Standard"/>
+  </Cube>
+</Schema>

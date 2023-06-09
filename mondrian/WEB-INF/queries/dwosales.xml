@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<Schema name="fpdwo">  
+
+<!-- Sales -->
+<Cube name="Penjualan" defaultMeasure="OrderQty">
+  
+  <Table name="fakta_penjualan"/>
+
+  <Dimension name="Time" foreignKey="TimeID">
+    <Hierarchy hasAll="true" allMemberName="All Times" primaryKey="TimeID">
+        <Table name="dimtime" />
+        <Level name="Year" column="Year" type="Numeric" uniqueMembers="true" levelType="TimeYears"/>
+        <Level name="Month" column="Month" uniqueMembers="false" type="Numeric" levelType="TimeMonths"/>
+        <Level name="Date" column="Date" uniqueMembers="false" type="Numeric" levelType="TimeDays"/>
+    </Hierarchy>
+  </Dimension>
+
+<Dimension name="Customer" foreignKey ="CustomerID">
+    <Hierarchy hasAll="true" allMemberName="All Customers" primaryKey ="CustomerID">
+        <Table name="dimcustomer"/>
+            <Level name="accountnumber" column="AccountNumber"/>
+    </Hierarchy>
+</Dimension>
+
+<Dimension name="Territory" foreignKey ="TerritoryID">
+    <Hierarchy hasAll="true" allMemberName="All Territorys" primaryKey ="TerritoryID">
+        <Table name="dimterritory"/>
+            <Level name="territoryname" column="TerritoryName"/>
+            <Level name="countryregioncode" column="CountryRegionCode"/>
+            <Level name="group" column="Group"/>
+    </Hierarchy>
+</Dimension>
+
+<Dimension name="Product" foreignKey ="ProductID">
+    <Hierarchy hasAll="true" allMemberName="All Products" primaryKey ="ProductID">
+        <Table name="dimproduct"/>
+            <Level name="productname" column="ProductName"/>
+            <Level name="productcategory" column="ProductCategory"/>
+            <Level name="productsubcategory" column="ProductSubCategory"/>
+            <Level name="standardcost" column="StandardCost"/>
+            <Level name="listprice" column="ListPrice"/>
+    </Hierarchy>
+</Dimension> 
+  
+<Dimension name="Ship Method" foreignKey ="ShipMethodID">
+    <Hierarchy hasAll="true" allMemberName="All ShipMethods" primaryKey ="ShipMethodID">
+        <Table name="dimshipmethod"/>
+            <Level name="shipname" column="ShipName"/>
+            <Level name="shipbase" column="ShipBase"/>
+            <Level name="shiprate" column="ShipRate"/>
+    </Hierarchy>
+</Dimension> 
+
+  <Measure name="Order Qty" column="OrderQty" aggregator="sum"
+      formatString="Standard"/>
+  <Measure name="Line Total" column="LineTotal" aggregator="sum"
+      formatString="Standard"/>
+</Cube>
+</Schema>
