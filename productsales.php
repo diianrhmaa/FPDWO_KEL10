@@ -21,7 +21,9 @@
     //CHART KEDUA (DRILL DOWN)
 
     //query untuk tahu SUM(Amount) semua kategori
-    $sql = "SELECT coalesce (pd.ProductCategory, 'Tidak Memiliki Kategori') AS ProductCategory, SUM(fs.OrderQty) AS OrderQuantity from fakta_penjualan fs join dimproduct pd on pd.ProductID = fs.ProductID group by pd.ProductCategory";
+    $sql = "SELECT coalesce (pd.ProductCategory, 'Tidak Memiliki Kategori') AS ProductCategory, SUM(fs.OrderQty) AS OrderQuantity
+    from fakta_penjualan fs join dimproduct pd on pd.ProductID = fs.ProductID
+    group by pd.ProductCategory";
     $hasil_kat = mysqli_query($conn,$sql);
 
     while($row = mysqli_fetch_all($hasil_kat)){
@@ -42,7 +44,9 @@
 
     //query untuk ambil penjualan di kategori
     $sql = " SELECT coalesce (pd.ProductCategory, 'Tidak Memiliki Kategori') AS ProductCategory, 
-    pd.ProductName as Name, SUM(fs.OrderQty) AS OrderQuantity from fakta_penjualan fs join dimproduct pd on pd.ProductID = fs.ProductID group by ProductCategory, Name";
+    pd.ProductName as Name, SUM(fs.OrderQty) AS OrderQuantity
+    from fakta_penjualan fs join dimproduct pd on pd.ProductID = fs.ProductID
+    group by ProductCategory, Name";
     $det_kat = mysqli_query($conn,$sql);
     $i = 0;
     while($row = mysqli_fetch_all($det_kat)) {
@@ -139,34 +143,32 @@
                                 </div>
                                     <div class="card-body">
                                     <?php
-                                    $sql = "SELECT p.ProductName, COUNT(fs.ProductID) as jumlah_prd
-                                    FROM dimproduct p
-                                    LEFT JOIN fakta_penjualan fs ON p.ProductID = fs.ProductID
-                                    GROUP BY p.ProductName";
-                                    $query = mysqli_query($conn, $sql);
-                                    if (mysqli_num_rows($query) > 0){
+                                        $sql = "SELECT p.ProductName, p.ProductCategory, p.ProductSubCategory, COUNT(fs.ProductID) AS jumlah_prd
+                                                FROM dimproduct p
+                                                LEFT JOIN fakta_penjualan fs ON p.ProductID = fs.ProductID
+                                                GROUP BY p.ProductName";
+                                        $query = mysqli_query($conn, $sql);
+                                        if (mysqli_num_rows($query) > 0) {
                                     ?>
                                         <div class="table-responsive">   
                                             <table class="table table-bordered table-striped table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th>Nama Kategori</th>
+                                                        <th>Nama Produk</th>
+                                                        <th>Kategori Produk</th>
+                                                        <th>Sub Kategori</th>
                                                         <th>Jumlah</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                <?php
-                                                    while($row = mysqli_fetch_array($query)){
-                                                        $productCategory = $row['ProductName'];
-                                                        $jumlahProduk = $row['jumlah_prd'];
-                                                    ?>
-                                                    <tr>
-                                                        <td><?php echo $productCategory; ?></td>
-                                                        <td><?php echo number_format($jumlahProduk, 0, ".", ","); ?></td>
-                                                    </tr>
-                                                    <?php
-                                                    }
-                                                    ?>
+                                                <?php while ($row = mysqli_fetch_array($query)) { ?>
+                                                        <tr>
+                                                            <td><?php echo $row['ProductName']; ?></td>
+                                                            <td><?php echo $row['ProductCategory']; ?></td>
+                                                            <td><?php echo $row['ProductSubCategory']; ?></td>
+                                                            <td><?php echo number_format($row['jumlah_prd'], 0, ".", ","); ?></td>
+                                                        </tr>
+                                                    <?php } ?>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -204,9 +206,6 @@
                     </div>
                     <!-- akhir row -->
                     <div class="row">
-
-                    </div>
-                    <div class="row">
                         <div class="container-fluid">
                                 <figure class="highcharts-figure">
                                     <div id="chart1"></div>
@@ -217,11 +216,11 @@
                     </div>
                     <div class="row">
                         <div class="container-fluid">
-                                <figure class="highcharts-figure">
-                                    <div id="chart2"></div>
-                                        <p class="highcharts-description">
-                                        </p>
-                                </figure>
+                            <figure class="highcharts-figure">
+                                <div id="chart2"></div>
+                                    <p class="highcharts-description">
+                                    </p>
+                            </figure>
                         </div>   
                     </div>                         
                 </div>
@@ -251,6 +250,7 @@
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
 
+    
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/data.js"></script>
     <script src="https://code.highcharts.com/modules/series-label.js"></script>
@@ -260,9 +260,9 @@
     <script src="https://code.highcharts.com/modules/data.js"></script>
     <script src="https://code.highcharts.com/modules/drilldown.js"></script>
     
-    <script>
+    <script type="text/javascript">
        // Retrieved from https://www.ssb.no/jord-skog-jakt-og-fiskeri/jakt
-Highcharts.chart('chart1', {
+    Highcharts.chart('chart1', {
     chart: {
         type: 'areaspline'
     },
@@ -284,7 +284,8 @@ Highcharts.chart('chart1', {
     xAxis: {
         categories : [
             <?php 
-                $sql = "SELECT SUM(fs.OrderQty) as Jumlah_terjual, dt.Year AS Tahun from fakta_penjualan fs join dimtime dt on dt.TimeID = fs.TimeID group by year";
+                $sql = "SELECT SUM(fs.OrderQty) as Jumlah_terjual, dt.Year AS Tahun from fakta_penjualan fs
+                join dimtime dt on dt.TimeID = fs.TimeID group by year";
                 $query = mysqli_query($conn, $sql);
                 if (mysqli_num_rows($query) > 0){
                     while($row2=mysqli_fetch_array($query)){
@@ -317,7 +318,8 @@ Highcharts.chart('chart1', {
         data:
             [
                 <?php 
-                $sql = "SELECT SUM(fs.OrderQty) as Jumlah_terjual, dt.Year AS Tahun from fakta_penjualan fs join dimtime dt on dt.TimeID = fs.TimeID group by year";
+                $sql = "SELECT SUM(fs.OrderQty) as Jumlah_terjual, dt.Year AS Tahun from fakta_penjualan fs
+                join dimtime dt on dt.TimeID = fs.TimeID group by year";
                 $query = mysqli_query($conn, $sql);
                 if (mysqli_num_rows($query) > 0){
                     while($row2=mysqli_fetch_array($query)){

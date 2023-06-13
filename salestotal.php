@@ -82,9 +82,9 @@
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                 <?php                                           
-                                                $sql = "SELECT SUM(fp.LineTotal) as LineTotal 
-                                                from fakta_penjualan fp
-                                                join dimtime dt on dt.TimeID = fp.TimeID
+                                                $sql = "SELECT SUM(fs.LineTotal) as LineTotal 
+                                                from fakta_penjualan fs
+                                                join dimtime dt on dt.TimeID = fs.TimeID
                                                 where Year='2001'";
                                                 $query = mysqli_query($conn, $sql);
                                                 if (mysqli_num_rows($query) > 0){
@@ -113,9 +113,9 @@
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                 <?php                                           
-                                                $sql = "SELECT SUM(fp.LineTotal) as LineTotal 
-                                                from fakta_penjualan fp
-                                                join dimtime dt on dt.TimeID = fp.TimeID
+                                                $sql = "SELECT SUM(fs.LineTotal) as LineTotal 
+                                                from fakta_penjualan fs
+                                                join dimtime dt on dt.TimeID = fs.TimeID
                                                 where Year='2002'";
                                                 $query = mysqli_query($conn, $sql);
                                                 if (mysqli_num_rows($query) > 0){
@@ -144,9 +144,9 @@
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                 <?php                                           
-                                                $sql = "SELECT SUM(fp.LineTotal) as LineTotal 
-                                                from fakta_penjualan fp
-                                                join dimtime dt on dt.TimeID = fp.TimeID
+                                                $sql = "SELECT SUM(fs.LineTotal) as LineTotal 
+                                                from fakta_penjualan fs
+                                                join dimtime dt on dt.TimeID = fs.TimeID
                                                 where Year='2003'";
                                                 $query = mysqli_query($conn, $sql);
                                                 if (mysqli_num_rows($query) > 0){
@@ -175,9 +175,9 @@
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                 <?php                                           
-                                                $sql = "SELECT SUM(fp.LineTotal) as LineTotal 
-                                                from fakta_penjualan fp
-                                                join dimtime dt on dt.TimeID = fp.TimeID
+                                                $sql = "SELECT SUM(fs.LineTotal) as LineTotal 
+                                                from fakta_penjualan fs
+                                                join dimtime dt on dt.TimeID = fs.TimeID
                                                 where Year='2004'";
                                                 $query = mysqli_query($conn, $sql);
                                                 if (mysqli_num_rows($query) > 0){
@@ -259,7 +259,7 @@
     xAxis: {
         categories : [
             <?php 
-                $sql = "SELECT ROUND(SUM(fs.LineTotal)) as LineTotal, dt.year as tahun from factsales fs 
+                $sql = "SELECT ROUND(SUM(fs.LineTotal)) as LineTotal, dt.year as tahun from fakta_penjualan fs 
                 join dimtime dt on dt.TimeID = fs.TimeID 
                 group by Year";
                 $query = mysqli_query($conn, $sql);
@@ -294,7 +294,7 @@
         data:
             [
                 <?php 
-                $sql = "SELECT ROUND(SUM(fs.LineTotal)) as LineTotal, dt.year as tahun from factsales fs 
+                $sql = "SELECT ROUND(SUM(fs.LineTotal)) as LineTotal, dt.year as tahun from fakta_penjualan fs 
                 join dimtime dt on dt.TimeID = fs.TimeID 
                 group by Year";
                 $query = mysqli_query($conn, $sql);

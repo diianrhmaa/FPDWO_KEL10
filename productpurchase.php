@@ -5,7 +5,6 @@
     $sql = "SELECT SUM(fp.OrderQty) AS tot from fakta_pembelian fp";
     $tot = mysqli_query($conn,$sql);
     $tot_amount = mysqli_fetch_row($tot);
-  
             $sql = "SELECT concat('name:',coalesce (pd.ProductCategory, 'Tidak Memiliki Kategori')) AS name, concat('y:',SUM(fp.OrderQty)*100/" . $tot_amount[0] .") AS y , concat('drilldown:',coalesce (pd.ProductCategory, 'Tidak Memiliki Kategori')) as drilldown 
             from fakta_pembelian fp
             join dimproduct pd on pd.ProductID = fp.ProductID 
@@ -95,16 +94,18 @@
 ?>
 <!-- akhir php -->
 
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>WAREHOUSE ADVENTUREWORK - Produk Sales</title>
-
+    
+    <title>WAREHOUSE ADVENTUREWORK - Produk Purchase</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -138,52 +139,48 @@
                         <h1 class="h3 mb-0 text-gray-800">Product Dibeli</h1>
                     </div>
                     <div class="row">
-                        <div class="col col-md-7 mb-4">
+                        <div class="col col-md-8 mb-4">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
                                         <h6 class="m-0 font-weight-bold text-primary">Data Kategori Produk</h6>
                                     </div>
                                         <div class="card-body">
                                         <?php
-                                        $sql = "SELECT p.ProductName, COUNT(fp.ProductID) as jumlah_prd
-                                        FROM dimproduct p
-                                        LEFT JOIN fakta_pembelian fp ON p.ProductID = fp.ProductID
-                                        GROUP BY p.ProductName";
-                                        $query = mysqli_query($conn, $sql);
-                                        if (mysqli_num_rows($query) > 0){
-                                        ?>
-                                            <div class="table-responsive">   
-                                                <table class="table table-bordered table-striped table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Nama Kategori</th>
-                                                            <th>Jumlah</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <?php
-                                                        while($row = mysqli_fetch_array($query)){
-                                                            $productCategory = $row['ProductName'];
-                                                            $jumlahProduk = $row['jumlah_prd'];
-                                                        ?>
-                                                        <tr>
-                                                            <td><?php echo $productCategory; ?></td>
-                                                            <td><?php echo number_format($jumlahProduk, 0, ".", ","); ?></td>
-                                                        </tr>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <?php
-                                        }
-                                        ?>
+                                            $sql = "SELECT p.ProductName, p.ProductCategory, p.ProductSubCategory, COUNT(fp.ProductID) AS jumlah_prd
+                                                    FROM dimproduct p
+                                                    LEFT JOIN fakta_pembelian fp ON p.ProductID = fp.ProductID
+                                                    GROUP BY p.ProductName";
+                                            $query = mysqli_query($conn, $sql);
+                                            if (mysqli_num_rows($query) > 0) {
+                                            ?>
+                                                <div class="table-responsive">   
+                                                    <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Nama Produk</th>
+                                                                <th>Kategori Produk</th>
+                                                                <th>Sub Kategori</th>
+                                                                <th>Jumlah</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <?php while ($row = mysqli_fetch_array($query)) { ?>
+                                                            <tr>
+                                                                <td><?php echo $row['ProductName']; ?></td>
+                                                                <td><?php echo $row['ProductCategory']; ?></td>
+                                                                <td><?php echo $row['ProductSubCategory']; ?></td>
+                                                                <td><?php echo number_format($row['jumlah_prd'], 0, ".", ","); ?></td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            <?php } ?>
                                         </div>
                                 </div>
                             </div>
                             <!-- akhir col -->
-                            <div class="col col-md-5 mb-4">
+                            <div class="col col-md-4 mb-4">
                             <div class="card border-left-info shadow py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -191,24 +188,25 @@
                                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                                 Jumlah Produk Terbeli (2001 - 2004)
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                <?php                                           
-                                                $sql = "SELECT SUM(OrderQty) as jumlah_trbl from fakta_pembelian";
-                                                $query = mysqli_query($conn, $sql);
-                                                if (mysqli_num_rows($query) > 0){
-                                                    while($row2=mysqli_fetch_array($query)){
-                                                        echo number_format($row2['jumlah_trbl'],0,".",",");
-                                                    }
-                                                }      
-                                                ?>  
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <?php                                           
+                                                    $sql = "SELECT SUM(OrderQty) as jumlah_trbl from fakta_pembelian";
+                                                    $query = mysqli_query($conn, $sql);
+                                                    if (mysqli_num_rows($query) > 0){
+                                                        while($row2=mysqli_fetch_array($query)){
+                                                            echo number_format($row2['jumlah_trbl'],0,".",",");
+                                                        }
+                                                    }      
+                                                    ?>  
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        </div>
                         <!-- akhir row -->
+                        <div class="row">
                             <div class="container-fluid">
                                 <figure class="highcharts-figure">
                                     <div id="chart1"></div>
@@ -216,7 +214,8 @@
                                         </p>
                                 </figure>
                             </div>
-                                                        
+                        </div>
+                        <div class="row">
                             <div class="container-fluid">
                                 <figure class="highcharts-figure">
                                     <div id="chart2"></div>
@@ -224,6 +223,7 @@
                                         </p>
                                 </figure>
                             </div>
+                        </div>   
                     </div>
                 </div>
             </div>
@@ -252,16 +252,16 @@
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/data.js"></script>
-<script src="https://code.highcharts.com/modules/drilldown.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
-   
-<script type="text/javascript">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    
+    <script type="text/javascript">
        // Retrieved from https://www.ssb.no/jord-skog-jakt-og-fiskeri/jakt
-Highcharts.chart('chart1', {
+    Highcharts.chart('chart1', {
     chart: {
         type: 'areaspline'
     },
@@ -347,7 +347,7 @@ Highcharts.chart('chart2', {
         text: 'Persentase Produk Terjual Berdasarkan Kategori'
     },
     subtitle: {
-        text: 'Klik di potongan kue untuk melihat detil nilai penjualan kategori berdasarkan kategori'
+        text: 'Klik di potongan kue untuk melihat detil nilai pembelian kategori berdasarkan kategori'
     },
 
     accessibility: {
