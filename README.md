@@ -1,12 +1,6 @@
 # FPDWO_KEL10
 
-Final Project Data Warehouse Kelompok 10:
-Kelas Paralel C / Tahun 2023
-
-1. Byanca Rebecca Y.S [21082010092]
-2. Dian Rahmawati [21082010100]
-3. Anisah Herian [21082010105]
-4. Prihandini Daffa N.R.F [21082010114]
+Final Project Data Warehouse
 
 Cara Instalasi
 
